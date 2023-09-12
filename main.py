@@ -1,77 +1,90 @@
-# Melody Gatan, Kenton La
-# 09/29/2023
-# three card monte gambling addiction go crazy
-
+# Kenton La, Melody Gatan
+# 8/29/2023
+# Have a user enter their bet and lets them choose a card for a chance to double their money
 import random
-    
-# get user's bet amount within the available money range
-def get_users_bet(money):
+
+
+def main():
+    money = 100
+    print('-Three card Monte-\nFind the queen to double your bet!\n')
+    end = False
+    while not end:
+        queen_loc = random.randint(1, 3)
+        bet = get_user_bet(money)
+        choice = get_user_choice()
+        display_queen_loc(queen_loc)
+        if choice == queen_loc:
+            print('You got lucky this time...')
+            money += bet
+        else:
+            print('Sorry... you lose.')
+            money -= bet
+        if money == 0:
+            print("You're out of money. Beat it loser!")
+            end = True
+        else:
+            valid = False
+            while not valid:
+                play_again = input('Play again? (Y/N): ')
+                if play_again.lower() == 'n':
+                    end = True
+                    valid = True
+                elif play_again.lower() == 'y':
+                    end = False
+                    valid = True
+                else:
+                    print('Invalid Input - should be Y/N')
+
+
+
+
+def get_user_bet(money):
     print(f'You have ${money}.')
     valid = False
     while not valid:
         try:
-            bet = int(input('How much you wanna bet? '))
+            bet = int(input('How much do you wanna bet? '))
             if money >= bet > 0:
-                valid = True
+                return bet
             else:
                 print(f'Invalid input - should be within range 1-{money}.')
         except ValueError:
             print('Invalid input - should be an integer.')
-    return bet
 
-# get user's card choice (1, 2, or 3)
-def get_users_choice():
+
+def get_user_choice():
+    template = (
+        "+-----+ +-----+ +-----+\n"
+        "|     | |     | |     |\n"
+        "|  1  | |  2  | |  3  |\n"
+        "|     | |     | |     |\n"
+        "+-----+ +-----+ +-----+"
+    )
+    print(template)
     valid = False
     while not valid:
         try:
-            choice = int(input('Find the queen: '))
-            if choice >= 1 and choice <= 3:
-                valid = True
+            queen_loc = int(input('Find the queen: '))
+            if 1 <= queen_loc <= 3:
+                return queen_loc
             else:
                 print(f'Invalid input - should be within range 1-3.')
         except ValueError:
             print('Invalid input - should be an integer.')
-    return choice
 
-# Display the cards with the queen's location
+
 def display_queen_loc(queen_loc):
-    template =(
-            "+-----+ +-----+ +-----+\n"
-            "|     | |     | |     |\n"
-           "|  {}  | |  {}  | |  {}  |\n"
-            "|     | |     | |     |\n"
-            "+-----+ +-----+ +-----+"
-            )
-    cards = ["K", "K", "K"]
-    cards[queen_loc - 1] = "Q"
-    # print(cards)
-    card_display = template.format(cards[0], cards[1], cards[2])
-    print(card_display)
+    top_card = "+-----+ +-----+ +-----+\n|     | |     | |     |"
+    bottom_card = "|     | |     | |     |\n+-----+ +-----+ +-----+"
 
-        
-#main game loop
-def main():
-    money = 100
-    queen_loc = 0
-    user_choice = 1
-    print('-Three card Monte-\nFind the queen to double your bet!\n')
-    while True:
-        queen_loc = random.randint(1,3)
-        bet = get_users_bet(money)
-        user_choice = get_users_choice()
-        display_queen_loc(queen_loc)
-        money -= bet
-        if user_choice == queen_loc:
-            print('You got lucky this time...')
-            money += bet * 2
-        else:
-            print('Sorry... you lose.')
-        if money == 0:
-            print('You\'re out of money. Beat it loser!')
-            return False
-        play = input('Play again? (Y/N): ')
-        if play != 'y':
-            return False
-        
-#start the game
+    print(top_card)
+    if queen_loc == 1:
+        print("|  Q  | |  K  | |  K  |")
+    elif queen_loc == 2:
+        print("|  K  | |  Q  | |  K  |")
+    else:
+        print("|  K  | |  K  | |  Q  |")
+    print(bottom_card)
+
+
 main()
